@@ -1,28 +1,27 @@
 const express = require('express')
 const router = express.Router()
+const Device = require('../models/device')
 
-const bodyParser = require('body-parser')
+router.use(express.json())
 
 router.get('/', (req, res) => {
-  res.render('devices', {devices: devices})
+  Device.find({}, function(err, devices) {
+    res.send(devices);
+  });
 })
 
 router.post('/create', (req, res) => {
-  res.status(200).send("Bedankt voor de inzending!")
-})
+  var newDevice = new Device({
+    name: req.body.name
+  })
 
-router
-.route('/:id')
-.get((req, res) => {
-  req.params.id
-  res.render('devicesDetail', {device: req.device})
-})
-
-const devices = [{ id: 0, company: 1, name:"Job", location:[50.8526592, 5.7147392]}, { id: 1, company: 2, name:"Thijs", location:[50.3456723, 5.5234678]}]
-
-router.param('id', (req, res, next, id) => {
-  req.device = devices[id]
-  next()
-})
+  newDevice.save((err, result) => { 
+    if(result == undefined) {
+      res.status(500).send(`Error: ${err._message}`)
+    } else {
+      res.status(200).send(`Device ${req.body.name} saved!`)
+    }
+  }) 
+})  
 
 module.exports = router

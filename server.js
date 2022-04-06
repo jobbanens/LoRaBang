@@ -1,25 +1,28 @@
+// Load .env variables
 require('dotenv').config()
 
+// Setup Express app
 const express = require('express')
-const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
-const moment = require('moment')
-
 const app = express()
+
+// Setup .ejs file rendering
 app.set('view engine', 'ejs')
 
-mongoose.connect("mongodb+srv://lora:FX9ixjQv2DjhRAJm@cluster0.zipfa.mongodb.net/LoRaBang?retryWrites=true&w=majority");
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
-  console.log("Connected successfully");
-});
+// Load database connection
+const db = require('./globals/db')
 
+// Render root index.html
 app.get('/', (req, res) => {
+  const moment = require('moment')
   res.render('index', { time: moment().format('hh:mm:ss') })
 })
 
+// Routes
 const deviceRouter = require('./routes/devices')
-app.use('/devices', deviceRouter)
+const locationRouter = require('./routes/locations')
 
+app.use('/devices', deviceRouter)
+app.use('/locations', locationRouter)
+
+// Start Express app
 app.listen(process.env.PORT, () => console.log(`Server running at http://localhost:${process.env.PORT}`))
