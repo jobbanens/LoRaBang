@@ -13,8 +13,12 @@ const db = require('./globals/db')
 
 // Render root index.html
 app.get('/', (req, res) => {
-  const moment = require('moment')
-  res.render('index', { time: moment().format('hh:mm:ss') })
+  // Retrieve all location data from the database and pass it to the renderer (views/index.ejs)
+  const Location = require('./models/location')
+  Location.find({}, function(err, data) {
+    _locations = data
+    res.render('index', {locations: _locations })
+  })
 })
 
 // Routes

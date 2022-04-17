@@ -12,7 +12,8 @@ router.get('/', (req, res) => {
 
 router.post('/create', (req, res) => {
   var newDevice = new Device({
-    name: req.body.name
+    name: req.body.name,
+    team: req.body.team
   })
 
   newDevice.save((err, result) => { 
