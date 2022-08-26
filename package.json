@@ -27,6 +27,6 @@
     "joigoose": "^8.0.2",
     "moment": "^2.29.1",
     "mongodb": "^4.4.1",
-    "mongoose": "^6.2.9"
+    "mongoose": "^6.4.6"
   }
 }
